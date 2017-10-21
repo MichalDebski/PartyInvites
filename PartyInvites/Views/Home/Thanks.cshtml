@@ -8,20 +8,47 @@
 
 <html>
 <head>
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap-theme.css" rel="stylesheet" />
     <meta name="viewport" content="width=device-width" />
     <title>Dziękujemy</title>
+    <style>
+        body {
+            background-color: #f1f1f1;
+        }
+    </style>
 </head>
 <body>
-    <div>
+    @{
+        try
+        {
+            WebMail.SmtpServer = "smtp.gmail.com";
+            WebMail.SmtpPort = 587;
+            WebMail.EnableSsl = true;
+            WebMail.UserName = "michal.s.debski@gmail.com";
+            WebMail.Password = "koreajapan2002";
+
+            WebMail.Send("michal.s.debski@gmail.com", "Powiadomienie RSVP",
+                        Model.Name + ((Model.WillAttend ?? false) ? "" : "nie") + " przyjdzie");
+
+        }
+        catch (Exception)
+        {
+            @:<b>Przepraszamy - nie możemy wysłać wiadomości RSVP.</b>
+        }
+    }
+    <div class="text-center">
         <h1>Dziękujemy, @Model.Name!</h1>
-        @if (Model.WillAttend == true)
-        {
-            @:Cieszymy się, że przyjdziesz do nas. Napoje są już w lodówce!
-        }
-        else
-        {
-            @:Przykro nam, że nie możesz się zjawić, ale dziękujemy za informację.
-        }
+        <div class="lead">
+            @if (Model.WillAttend == true)
+            {
+                @:Cieszymy się, że przyjdziesz do nas. Napoje są już w lodówce!
+            }
+            else
+            {
+                @:Przykro nam, że nie możesz się zjawić, ale dziękujemy za informację.
+            }
+        </div>
     </div>
 </body>
 </html>
